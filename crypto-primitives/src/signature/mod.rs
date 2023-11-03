@@ -57,7 +57,7 @@ mod test {
         groups::Group, jubjub::JubJubAffine as JubJub, test_rng, to_bytes, ToBytes, UniformRand,
     };
     use blake2::Blake2s;
-
+    use digest::consts::U32;
     fn sign_and_verify<S: SignatureScheme>(message: &[u8]) {
         let rng = &mut test_rng();
         let parameters = S::setup::<_>(rng).unwrap();
@@ -89,13 +89,13 @@ mod test {
     fn schnorr_signature_test() {
         let message = "Hi, I am a Schnorr signature!";
         let rng = &mut test_rng();
-        sign_and_verify::<SchnorrSignature<JubJub, Blake2s>>(message.as_bytes());
-        failed_verification::<SchnorrSignature<JubJub, Blake2s>>(
+        sign_and_verify::<SchnorrSignature<JubJub, Blake2s<U32>>>(message.as_bytes());
+        failed_verification::<SchnorrSignature<JubJub, Blake2s<U32>>>(
             message.as_bytes(),
             "Bad message".as_bytes(),
         );
         let random_scalar = to_bytes!(<JubJub as Group>::ScalarField::rand(rng)).unwrap();
-        randomize_and_verify::<SchnorrSignature<JubJub, Blake2s>>(
+        randomize_and_verify::<SchnorrSignature<JubJub, Blake2s<U32>>>(
             message.as_bytes(),
             &random_scalar.as_slice(),
         );

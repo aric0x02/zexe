@@ -14,9 +14,9 @@ use num_traits::{One, Zero};
 
 #[macro_use]
 pub mod macros;
-pub mod models;
+pub mod fp_models;
 
-pub use self::models::*;
+pub use self::fp_models::*;
 
 #[macro_export]
 macro_rules! field_new {

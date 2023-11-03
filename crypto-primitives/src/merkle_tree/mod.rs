@@ -111,8 +111,8 @@ impl<P: MerkleTreeConfig> MerkleHashTree<P> {
 
         let last_level_size = leaves.len().next_power_of_two();
         let tree_size = 2 * last_level_size - 1;
-        let tree_height = tree_height(tree_size);
-        assert!(tree_height as u8 <= Self::HEIGHT);
+        let tree_height = tree_height(tree_size).max(1);
+        assert!(tree_height > 0 && tree_height as u8 <= Self::HEIGHT);
 
         // Initialize the merkle tree.
         let mut tree = Vec::with_capacity(tree_size);

@@ -1,6 +1,6 @@
 use super::CommitmentScheme;
 use crate::Error;
-use blake2::Blake2s as b2s;
+use blake2::Blake2s256 as b2s;
 use digest::Digest;
 use rand::Rng;
 
@@ -24,10 +24,9 @@ impl CommitmentScheme for Blake2sCommitment {
         randomness: &Self::Randomness,
     ) -> Result<Self::Output, Error> {
         let mut h = b2s::new();
-        h.input(input);
-        h.input(randomness.as_ref());
-        let mut result = [0u8; 32];
-        result.copy_from_slice(&h.result());
-        Ok(result)
+        h.update(input);
+        h.update(randomness.as_ref());
+        let result = h.finalize();
+        Ok(result[..].try_into().unwrap())
     }
 }

@@ -6,9 +6,10 @@ mod affine {
     use blake2::Blake2s;
     use criterion::Criterion;
     use crypto_primitives::signature::{schnorr::*, SignatureScheme};
+    use digest::consts::U32;
     use rand::{self, Rng};
 
-    type SchnorrEdwards = SchnorrSignature<Edwards, Blake2s>;
+    type SchnorrEdwards = SchnorrSignature<Edwards, Blake2s<U32>>;
     fn schnorr_signature_setup(c: &mut Criterion) {
         c.bench_function("SchnorrEdwardsAffine: Setup", move |b| {
             b.iter(|| {
@@ -94,9 +95,10 @@ mod projective {
     use blake2::Blake2s;
     use criterion::Criterion;
     use crypto_primitives::signature::{schnorr::*, SignatureScheme};
+    use digest::consts::U32;
     use rand::{self, Rng};
 
-    type SchnorrEdwards = SchnorrSignature<Edwards, Blake2s>;
+    type SchnorrEdwards = SchnorrSignature<Edwards, Blake2s<U32>>;
     fn schnorr_signature_setup(c: &mut Criterion) {
         c.bench_function("SchnorrEdwardsProjective: Setup", move |b| {
             b.iter(|| {

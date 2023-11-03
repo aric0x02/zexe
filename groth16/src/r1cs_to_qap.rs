@@ -128,7 +128,7 @@ impl R1CStoQAP {
             .zip(&b)
             .for_each(|((h_i, a_i), b_i)| *h_i *= &(*d2 * a_i + &(*d1 * b_i)));
 
-        h[0].sub_assign(&d3);
+        h[0].sub_assign(d3);
         let d1d2 = *d1 * d2;
         h[0].sub_assign(&d1d2);
         h.push(d1d2);

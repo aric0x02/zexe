@@ -1,6 +1,5 @@
 use alloc::vec::Vec;
-use blake2::Blake2s as b2s;
-use digest::Digest;
+use blake2::{Blake2s256 as b2s, Digest};
 
 use super::PRF;
 use crate::CryptoError;
@@ -19,12 +18,11 @@ impl PRF for Blake2s {
     fn evaluate(seed: &Self::Seed, input: &Self::Input) -> Result<Self::Output, CryptoError> {
         let eval_time = start_timer!(|| "Blake2s::Eval");
         let mut h = b2s::new();
-        h.input(seed.as_ref());
-        h.input(input.as_ref());
-        let mut result = [0u8; 32];
-        result.copy_from_slice(&h.result());
+        h.update(seed.as_ref());
+        h.update(input.as_ref());
+        let result = h.finalize();
         end_timer!(eval_time);
-        Ok(result)
+        Ok(result.try_into().unwrap())
     }
 }
 
@@ -81,9 +79,17 @@ impl Blake2sWithParameterBlock {
 
     pub fn evaluate(&self, input: &[u8]) -> Vec<u8> {
         let eval_time = start_timer!(|| "Blake2sWithParameterBlock::Eval");
-        let mut h = b2s::with_parameter_block(&self.parameters());
-        h.input(input.as_ref());
+        let v = self
+            .parameters()
+            .iter()
+            .map(|&a| a.to_le_bytes())
+            .flatten()
+            .collect::<Vec<_>>();
+        let mut h = b2s::new();
+        h.update(&v[..]);
+        h.update(input.as_ref());
         end_timer!(eval_time);
-        h.result().to_vec()
+        let result = h.finalize();
+        result[..].to_vec()
     }
 }

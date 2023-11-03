@@ -433,9 +433,8 @@ where
         // Enforced with 2 constraints:
         //     (2*A.c0) * A.c1 = result.c1
         //     (A.c0 + A.c1) * (A.c0 + non_residue * A.c1) = result.c0 + result.c1 * (1
-        // + non_residue)/2 Reference:
-        //     "Multiplication and Squaring on Pairing-Friendly Fields"
-        //     Devegili, OhEigeartaigh, Scott, Dahab
+        // + non_residue)/2 Reference: "Multiplication and Squaring on Pairing-Friendly
+        //   Fields" Devegili, OhEigeartaigh, Scott, Dahab
 
         let mut v0 = self.c0.mul(cs.ns(|| "v0"), &self.c1)?;
         let a0_plus_a1 = self.c0.add(cs.ns(|| "a0 + a1"), &self.c1)?;

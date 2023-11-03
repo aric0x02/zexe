@@ -530,12 +530,11 @@ impl<ConstraintF: PrimeField> PRFGadget<Blake2s, ConstraintF> for Blake2sGadget 
 #[cfg(test)]
 mod test {
     use algebra::jubjub::Fq as Fr;
-    use digest::{FixedOutput, Input};
     use rand::{Rng, SeedableRng};
     use rand_xorshift::XorShiftRng;
 
     use crate::prf::blake2s::{constraints::blake2s_gadget, Blake2s as B2SPRF};
-    use blake2::Blake2s;
+    use blake2::Digest;
     use r1cs_core::ConstraintSystem;
 
     use super::Blake2sGadget;
@@ -634,13 +633,13 @@ mod test {
         let mut rng = XorShiftRng::seed_from_u64(1231275789u64);
 
         for input_len in (0..32).chain((32..256).filter(|a| a % 8 == 0)) {
-            let mut h = Blake2s::new_keyed(&[], 32);
+            let mut h = blake2::Blake2s256::new();
 
             let data: Vec<u8> = (0..input_len).map(|_| rng.gen()).collect();
 
-            h.process(&data);
+            h.update(&data);
 
-            let hash_result = h.fixed_result();
+            let hash_result = h.finalize();
 
             let mut cs = TestConstraintSystem::<Fr>::new();
 
@@ -662,7 +661,7 @@ mod test {
 
             assert!(cs.is_satisfied());
 
-            let mut s = hash_result
+            let mut s = hash_result[..]
                 .as_ref()
                 .iter()
                 .flat_map(|&byte| (0..8).map(move |i| (byte >> i) & 1u8 == 1u8));

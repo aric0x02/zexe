@@ -17,7 +17,7 @@ keywords = ["cryptography", "finite fields", "fft"]
 categories = ["cryptography"]
 include = ["Cargo.toml", "src", "README.md", "LICENSE-APACHE", "LICENSE-MIT"]
 license = "MIT/Apache-2.0"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 algebra-core = { path = "../algebra-core", default-features = false }

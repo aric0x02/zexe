@@ -17,17 +17,18 @@ keywords = ["r1cs", "groth16", "gm17", "pedersen", "blake2s"]
 categories = ["cryptography"]
 include = ["Cargo.toml", "src", "README.md", "LICENSE-APACHE", "LICENSE-MIT"]
 license = "MIT/Apache-2.0"
-edition = "2018"
+edition = "2021"
 
 ################################# Dependencies ################################
 
 [dev-dependencies]
 algebra = { path = "../algebra", default-features = false }
-blake2 = { version = "0.7", default-features = false }
-criterion = "0.3.1"
+blake2 = { version = "0.10.6", default-features = false }
+criterion = {version ="0.5.1", features = ["html_reports"] }
 crypto-primitives = { path = "../crypto-primitives" }
 rand = { version = "0.7" }
 rand_xorshift = { version = "0.2" }
+digest = "0.10.7"
 
 ################################# Benchmarks ##################################
 

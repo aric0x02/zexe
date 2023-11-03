@@ -3,7 +3,7 @@
 #![deny(unused_qualifications, variant_size_differences, unused_extern_crates)]
 #![deny(non_shorthand_field_patterns, unused_attributes, unused_imports)]
 #![deny(renamed_and_removed_lints, unused_allocation, unused_comparisons)]
-#![deny(const_err, unused_must_use, unused_mut, bare_trait_objects)]
+#![deny(unused_must_use, unused_mut, bare_trait_objects)]
 #![forbid(unsafe_code)]
 
 #[cfg(all(test, not(feature = "std")))]
